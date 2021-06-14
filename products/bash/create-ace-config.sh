@@ -245,6 +245,7 @@ divider
 echo -e "$INFO [INFO] Templating postgresql policy"
 cat $CONFIG_DIR/PostgresqlPolicy.policyxml.template |
   sed "s#{{DB_SVC}}#$DB_SVC#g;" |
+  sed "s#{{DB_PORT}}#$DB_PORT#g;" |
   sed "s#{{DB_NAME}}#$DB_NAME#g;" |
   sed "s#{{DB_USER}}#$DB_USER#g;" |
   sed "s#{{DB_PASS}}#$DB_PASS#g;" >$CONFIG_DIR/$SUFFIX/DefaultPolicies/PostgresqlPolicy.policyxml

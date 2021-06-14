@@ -6,14 +6,14 @@
     <databaseVersion>999</databaseVersion>
     <type4DriverClassName>org.postgresql.Driver</type4DriverClassName>
     <type4DatasourceClassName>org.postgresql.xa.PGXADataSource</type4DatasourceClassName>
-    <connectionUrlFormat>jdbc:postgresql://[serverName]:[portNumber]/[databaseName]?user={{DB_USER}}&amp;password={{DB_PASS}}</connectionUrlFormat>
+    <connectionUrlFormat>jdbc:postgresql://[serverName]:[portNumber]/[databaseName]?user={{DB_USER}}&amp;password={{DB_PASS}}&amp;sslmode=verify-full</connectionUrlFormat>
     <connectionUrlFormatAttr1></connectionUrlFormatAttr1>
     <connectionUrlFormatAttr2></connectionUrlFormatAttr2>
     <connectionUrlFormatAttr3></connectionUrlFormatAttr3>
     <connectionUrlFormatAttr4></connectionUrlFormatAttr4>
     <connectionUrlFormatAttr5></connectionUrlFormatAttr5>
     <serverName>{{DB_SVC}}</serverName>
-    <portNumber>5432</portNumber>
+    <portNumber>{{DB_PORT}}</portNumber>
     <jarsURL></jarsURL>
     <databaseSchemaNames>useProvidedSchemaNames</databaseSchemaNames>
     <description></description>
