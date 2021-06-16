@@ -110,6 +110,25 @@ for i in $(seq 1 120); do
   else
     echo "Waiting for APIC install to complete (Attempt $i of 120). Status: $APIC_STATUS"
     kubectl get apic,pods,pvc -n $NAMESPACE
+    # if ((  $i % 15 == 0 )); then
+    #   echo "------------------------WORKAROUND: MANUALLY DELETING SOME APIC PODS - TURNSTILE POD"
+    #   TURNSTILE=$(oc get pods -n $NAMESPACE | grep "mgmt-turnstile" | awk '{print $1}')
+    #   oc delete pod -n $NAMESPACE $TURNSTILE 
+    # fi
+    if ((  $i % 15 == 0 )); then
+      echo "------------------------WORKAROUND: PATCHING LIVENESS PROBE FOR TURNSTILE POD"
+      TURNSTILE_LIVENESS=$(oc get deployment ademo-mgmt-turnstile -n $NAMESPACE -o json | jq '.spec.template.spec.containers[0].livenessProbe.initialDelaySeconds')
+      if [[ "$TURNSTILE_LIVENESS" != 60 ]]; then
+        oc patch deployment ademo-mgmt-turnstile -n $NAMESPACE -p '{"spec":{"template":{"spec":{"containers": [{"name": "turnstile", "livenessProbe":{"initialDelaySeconds":60}}]}}}}'
+        # oc delete pod -n $NAMESPACE ademo-gw-0 || echo "ademo-gw-0 not found"
+      fi
+      set -o pipefail
+      ADEMO_STATUS=$(oc get pod ademo-gw-0  -o json | jq -r '.status.conditions[] | select(.type=="Ready") |.status' || echo "ADEMO pod not found")
+      if [[ "$ADEMO_STATUS" != "True" ]]; then
+        oc delete pod -n $NAMESPACE ademo-gw-0 || echo "ademo-gw-0 not found"
+      fi
+      set +o pipefail
+    fi
     echo "Checking again in one minute..."
     sleep 60
   fi
