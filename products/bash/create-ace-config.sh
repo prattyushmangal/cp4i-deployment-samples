@@ -224,13 +224,15 @@ CERTS=$CONFIG_DIR/certs.pem
 KEY=$CONFIG_DIR/key.pem
 rm $CERTS $KEY $KEYSTORE
 
-
+CERT_KEY_POSTGRES=$CONFIG_DIR/certs-key-postgres.pem
 #Get out the certificate for the External PG DB
-ibmcloud cdb deployment-cacert cp-svt-postgres-db | tail -n+4 > $CERTS_KEY_BUNDLE
+ibmcloud cdb deployment-cacert cp-svt-postgres-db | tail -n+4 > $CERT_KEY_POSTGRES
 
-oc -n openshift-config-managed get secret router-certs -o json | jq -r '.data | .[]' | base64 --decode >> $CERTS_KEY_BUNDLE
+oc -n openshift-config-managed get secret router-certs -o json | jq -r '.data | .[]' | base64 --decode > $CERTS_KEY_BUNDLE
 openssl crl2pkcs7 -nocrl -certfile $CERTS_KEY_BUNDLE | openssl pkcs7 -print_certs -out $CERTS
 openssl pkey -in $CERTS_KEY_BUNDLE -out $KEY
+
+cat $CERT_KEY_POSTGRES >> $KEY
 openssl pkcs12 -export -out $KEYSTORE -inkey $KEY -in $CERTS -password pass:$KEYSTORE_PASS
 
 divider
