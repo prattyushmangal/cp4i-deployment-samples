@@ -6,7 +6,7 @@
     <databaseVersion>999</databaseVersion>
     <type4DriverClassName>org.postgresql.Driver</type4DriverClassName>
     <type4DatasourceClassName>org.postgresql.xa.PGXADataSource</type4DatasourceClassName>
-    <connectionUrlFormat>jdbc:postgresql://[serverName]:[portNumber]/[databaseName]?user={{DB_USER}}&amp;password={{DB_PASS}}&amp;sslmode=verify-full</connectionUrlFormat>
+    <connectionUrlFormat>jdbc:postgresql://[serverName]:[portNumber]/[databaseName]?user={{DB_USER}}&amp;password={{DB_PASS}}&amp;sslmode=verify-full&amp;sslrootcert=/opt/ibm/ace-11/common/jdk/jre/lib/security/cacerts</connectionUrlFormat>
     <connectionUrlFormatAttr1></connectionUrlFormatAttr1>
     <connectionUrlFormatAttr2></connectionUrlFormatAttr2>
     <connectionUrlFormatAttr3></connectionUrlFormatAttr3>
