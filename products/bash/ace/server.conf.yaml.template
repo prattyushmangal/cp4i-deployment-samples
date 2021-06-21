@@ -8,5 +8,3 @@ ResourceManagers:
     KeystoreFile: '/home/aceuser/keystores/{{KEYSTORE}}'
     KeystoreType: 'PKCS12'
     KeystorePassword: 'brokerKeystore::password'
-  JVM:
-    truststorePass: 'cacerts'
