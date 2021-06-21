@@ -92,7 +92,8 @@ else
 fi
 
 if [[ -z "${ace_policy_names// /}" ]]; then
-  ace_policy_names="[keystore-ddd, pgpem, $POLICY_PROJECT_TYPE, serverconf-ddd, setdbparms-ddd, application.kdb, application.sth, application.jks]"
+  #pgpem removed for test without SSL
+  ace_policy_names="[keystore-ddd, $POLICY_PROJECT_TYPE, serverconf-ddd, setdbparms-ddd, application.kdb, application.sth, application.jks]"
 fi
 
 echo -e "\nINFO: ACE policy configurations: '$ace_policy_names'"
