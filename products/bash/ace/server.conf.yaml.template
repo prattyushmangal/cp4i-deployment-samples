@@ -9,4 +9,4 @@ ResourceManagers:
     KeystoreType: 'PKCS12'
     KeystorePassword: 'brokerKeystore::password'
   JVM:
-    vmSystemProperty: '-Djavax.net.debug=ssl'
+    jvmSystemProperty: '-Djavax.net.debug=ssl'
