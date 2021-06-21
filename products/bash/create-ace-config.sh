@@ -48,6 +48,7 @@ CURRENT_DIR=$(dirname $0)
 WORKING_DIR=/tmp
 CONFIG_DIR=$WORKING_DIR/ace
 CONFIG_YAML=$WORKING_DIR/configurations.yaml
+CONFIG_YAML2=$WORKING_DIR/configurations2.yaml
 MQ_CERT=$WORKING_DIR/mq/createcerts
 API_USER="bruce"
 KEYSTORE_PASS=$(
@@ -82,6 +83,34 @@ function buildConfigurationCR() {
   echo "  contents: ${CONTENTS}" >>$CONFIG_YAML
   echo "  type: $type" >>$CONFIG_YAML
   echo "---" >>$CONFIG_YAML
+}
+
+function buildConfigurationCR2() {
+  local type=$1
+  local name=$2
+  local file=$3
+  if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    echo -e "$INFO [INFO] Creating ace config - base64 command for linux"
+    COMMAND="base64 -w0 $file"
+  elif [[ "$OSTYPE" == "darwin"* ]]; then
+    echo -e "$INFO [INFO] Creating ace config base64 command for MAC"
+    COMMAND="base64 $file"
+  fi
+  CONTENTS="$($COMMAND)"
+  if [[ "$?" != "0" ]]; then
+    echo -e "$CROSS [ERROR] Failed to base64 encode file using: $COMMAND"
+    exit 1
+  fi
+
+  echo "apiVersion: appconnect.ibm.com/v1beta1" >>$CONFIG_YAML2
+  echo "kind: Configuration" >>$CONFIG_YAML2
+  echo "metadata:" >>$CONFIG_YAML2
+  echo "  name: $name" >>$CONFIG_YAML2
+  echo "  namespace: $NAMESPACE" >>$CONFIG_YAML2
+  echo "spec:" >>$CONFIG_YAML2
+  echo "  contents: ${CONTENTS}" >>$CONFIG_YAML2
+  echo "  type: $type" >>$CONFIG_YAML2
+  echo "---" >>$CONFIG_YAML2
 }
 
 while getopts "n:g:u:d:p:s:t" opt; do
@@ -178,8 +207,8 @@ echo -e "$INFO [INFO] DEBUG mode in creating ace config: '$DEBUG'"
 
 divider
 
-TYPES=("serverconf" "keystore" "truststorecertificate" "keystore" "keystore" "truststore" "policyproject" "setdbparms")
-FILES=("$CONFIG_DIR/$SUFFIX/server.conf.yaml" "$KEYSTORE" "$CONFIG_DIR/postgrescert.pem" "$MQ_CERT/application.kdb" "$MQ_CERT/application.sth" "$MQ_CERT/application.jks" "$CONFIG_DIR/$SUFFIX/DefaultPolicies" "$CONFIG_DIR/$SUFFIX/setdbparms.txt")
+TYPES=("serverconf" "keystore" "truststorecertificate" "generic" "keystore" "keystore" "truststore" "policyproject" "setdbparms")
+FILES=("$CONFIG_DIR/$SUFFIX/server.conf.yaml" "$KEYSTORE" "$CONFIG_DIR/generic.zip" "$CONFIG_DIR/postgrescert.pem" "$MQ_CERT/application.kdb" "$MQ_CERT/application.sth" "$MQ_CERT/application.jks" "$CONFIG_DIR/$SUFFIX/DefaultPolicies" "$CONFIG_DIR/$SUFFIX/setdbparms.txt")
 NAMES=("serverconf-$SUFFIX" "keystore-$SUFFIX" "pgpem" "application.kdb" "application.sth" "application.jks" "policyproject-${SUFFIX}${DDD_SUFFIX_FOR_ACE_POLICYPROJECT}" "setdbparms-$SUFFIX")
 
 # Copy all static config files & templates to default working directory (/tmp)
@@ -227,6 +256,11 @@ rm $CERTS $KEY $KEYSTORE
 
 #Get out the certificate for the External PG DB
 ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.cli.certificate.certificate_base64' | base64 --decode > $CONFIG_DIR/postgrescert.pem
+echo -e "\n$INFO [INFO] Target: $file"
+if [[ -d $CONFIG_DIR/postgrescert.pem ]]; then
+  python -m zipfile -c postgrescert.zip $CONFIG_DIR/postgrescert.pem
+fi
+buildConfigurationCR2 generic generic postgrescert.zip
 # openssl crl2pkcs7 -nocrl -certfile postgrescert.pem | openssl pkcs7 -print_certs -out postgrescertpk7.pem
 # openssl pkey -in postgrescert.pem -out pgkey.pem
 # openssl pkcs12 -export -out $WORKING_DIR/pgkeystore.p12 -inkey pgkey.pem -in postgrescertpk7.pem -password pass:$KEYSTORE_PASS
@@ -292,6 +326,16 @@ done
 $DEBUG && divider && echo -e "[DEBUG] config yaml:\n\n $(cat -n $CONFIG_YAML)"
 
 divider
+
+# Apply configuration yaml2
+echo -e "$INFO [INFO] Applying configuration yaml2\n"
+oc apply -f $CONFIG_YAML2
+if [[ "$?" != "0" ]]; then
+  echo -e "$CROSS [ERROR] Failed to apply $CONFIG_YAML2"
+  exit 1
+else
+  echo -e "\n$TICK [SUCCESS] Successfully applied all the configuration yaml2"
+fi
 
 # Apply configuration yaml
 echo -e "$INFO [INFO] Applying configuration yaml\n"
