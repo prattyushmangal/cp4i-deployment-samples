@@ -1,6 +1,7 @@
 serverConfVersion: 1
 BrokerRegistry:
   mqKeyRepository: /home/aceuser/keystores/application
+  brokerTruststorePass: 'brokerTruststore::password'
 forceServerHTTPS: true
 forceServerHTTPSecurityProfile: '{DefaultPolicies}:BasicAuthPolicy'
 ResourceManagers:
