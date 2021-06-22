@@ -160,8 +160,10 @@ DDD_SUFFIX_FOR_ACE_POLICYPROJECT=$([[ $SUFFIX == "ddd" ]] && echo "-${DDD_DEMO_T
 ibmcloud plugin install cloud-databases
 
 DB_POD=$(oc get pod -n $POSTGRES_NAMESPACE -l name=postgresql -o jsonpath='{.items[].metadata.name}')
-DB_SVC=$(ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.postgres.hosts[0].hostname')
-DB_PORT=$(ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.postgres.hosts[0].port')
+#DB_SVC=$(ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.postgres.hosts[0].hostname')
+#DB_PORT=$(ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.postgres.hosts[0].port')
+DB_SVC="kafkasvt1.fyre.ibm.com"
+DB_PROT="5432"
 
 echo -e "$INFO [INFO] Current directory: $CURRENT_DIR"
 echo -e "$INFO [INFO] Working directory: $WORKING_DIR"
@@ -226,7 +228,8 @@ rm $CERTS $KEY $KEYSTORE
 
 
 #Get out the certificate for the External PG DB
-ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.cli.certificate.certificate_base64' | base64 --decode > $CONFIG_DIR/postgrescert.pem
+#ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.cli.certificate.certificate_base64' | base64 --decode > $CONFIG_DIR/postgrescert.pem
+
 # openssl crl2pkcs7 -nocrl -certfile postgrescert.pem | openssl pkcs7 -print_certs -out postgrescertpk7.pem
 # openssl pkey -in postgrescert.pem -out pgkey.pem
 # openssl pkcs12 -export -out $WORKING_DIR/pgkeystore.p12 -inkey pgkey.pem -in postgrescertpk7.pem -password pass:$KEYSTORE_PASS
