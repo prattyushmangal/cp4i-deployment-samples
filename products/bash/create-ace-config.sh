@@ -40,9 +40,9 @@ INFO="\xE2\x84\xB9"
 TICK="\xE2\x9C\x85"
 NAMESPACE="cp4i"
 POSTGRES_NAMESPACE=
-DB_USER="cp4i"
-DB_NAME="db_cp4i"
-DB_PASS=""
+DB_USER="db2inst1"
+DB_NAME="testdb"
+DB_PASS="db2inst1"
 SUFFIX="ddd"
 CURRENT_DIR=$(dirname $0)
 WORKING_DIR=/tmp
@@ -163,7 +163,7 @@ DB_POD=$(oc get pod -n $POSTGRES_NAMESPACE -l name=postgresql -o jsonpath='{.ite
 #DB_SVC=$(ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.postgres.hosts[0].hostname')
 #DB_PORT=$(ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.postgres.hosts[0].port')
 DB_SVC="9.30.213.124"
-DB_PORT="5432"
+DB_PORT="50000"
 
 echo -e "$INFO [INFO] Current directory: $CURRENT_DIR"
 echo -e "$INFO [INFO] Working directory: $WORKING_DIR"

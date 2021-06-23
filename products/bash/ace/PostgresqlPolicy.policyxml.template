@@ -2,10 +2,10 @@
 <policies>
   <policy policyType="JDBCProviders" policyName="PostgresqlPolicy" policyTemplate="DB2_91">
     <databaseName>{{DB_NAME}}</databaseName>
-    <databaseType>Postgresql</databaseType>
-    <databaseVersion>999</databaseVersion>
-    <type4DriverClassName>org.postgresql.Driver</type4DriverClassName>
-    <type4DatasourceClassName>org.postgresql.xa.PGXADataSource</type4DatasourceClassName>
+    <databaseType>DB2 Universal Database</databaseType>
+    <databaseVersion>9.1</databaseVersion>
+    <type4DriverClassName>com.ibm.db2.jcc.DB2Driver</type4DriverClassName>
+    <type4DatasourceClassName>com.ibm.db2.jcc.DB2XADataSource</type4DatasourceClassName>
     <connectionUrlFormat>jdbc:postgresql://[serverName]:[portNumber]/[databaseName]?user={{DB_USER}}&amp;password={{DB_PASS}}</connectionUrlFormat>
     <connectionUrlFormatAttr1></connectionUrlFormatAttr1>
     <connectionUrlFormatAttr2></connectionUrlFormatAttr2>
