@@ -8,5 +8,3 @@ ResourceManagers:
     KeystoreFile: '/home/aceuser/keystores/{{KEYSTORE}}'
     KeystoreType: 'PKCS12'
     KeystorePassword: 'brokerKeystore::password'
-  JVM:
-    jvmSystemProperty: '-Djavax.net.ssl.trustStore=/opt/ibm/ace-11/common/jdk/jre/lib/security/cacerts -Djavax.net.ssl.trustStorePassword=changeit'
