@@ -207,8 +207,8 @@ echo -e "$INFO [INFO] DEBUG mode in creating ace config: '$DEBUG'"
 
 divider
 
-TYPES=("serverconf" "keystore" "truststorecertificate" "generic" "keystore" "keystore" "truststore" "policyproject" "setdbparms")
-FILES=("$CONFIG_DIR/$SUFFIX/server.conf.yaml" "$KEYSTORE" "$CONFIG_DIR/postgrescert.pem" "$CONFIG_DIR/generic.zip" "$MQ_CERT/application.kdb" "$MQ_CERT/application.sth" "$MQ_CERT/application.jks" "$CONFIG_DIR/$SUFFIX/DefaultPolicies" "$CONFIG_DIR/$SUFFIX/setdbparms.txt")
+TYPES=("serverconf" "keystore" "truststorecertificate" "keystore" "keystore" "truststore" "policyproject" "setdbparms")
+FILES=("$CONFIG_DIR/$SUFFIX/server.conf.yaml" "$KEYSTORE" "$CONFIG_DIR/postgrescert.pem" "$MQ_CERT/application.kdb" "$MQ_CERT/application.sth" "$MQ_CERT/application.jks" "$CONFIG_DIR/$SUFFIX/DefaultPolicies" "$CONFIG_DIR/$SUFFIX/setdbparms.txt")
 NAMES=("serverconf-$SUFFIX" "keystore-$SUFFIX" "pgpem" "application.kdb" "application.sth" "application.jks" "policyproject-${SUFFIX}${DDD_SUFFIX_FOR_ACE_POLICYPROJECT}" "setdbparms-$SUFFIX")
 
 # Copy all static config files & templates to default working directory (/tmp)
@@ -261,7 +261,7 @@ ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.cli.ce
 openssl x509 -in $postgresfile -out $CONFIG_DIR/postgres.der -outform der
 echo -e "\n$INFO [INFO] Target zip file: $postgresfile"
 zip $postgresfilezip $CONFIG_DIR/postgres.der
-buildConfigurationCR2 generic generic $CONFIG_DIR/postgrescert.zip
+buildConfigurationCR2 generic generic $postgresfilezip
 
 # openssl crl2pkcs7 -nocrl -certfile postgrescert.pem | openssl pkcs7 -print_certs -out postgrescertpk7.pem
 # openssl pkey -in postgrescert.pem -out pgkey.pem
