@@ -9,4 +9,4 @@ ResourceManagers:
     KeystoreType: 'PKCS12'
     KeystorePassword: 'brokerKeystore::password'
   JVM:
-    jvmSystemProperty: '-Djavax.net.debug=ssl'
+    jvmSystemProperty: '-Dweblogic.security.SSL.minimumProtocolVersion=TLSv1.1'

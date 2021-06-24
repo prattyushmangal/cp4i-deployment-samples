@@ -228,7 +228,7 @@ rm $CERTS $KEY $KEYSTORE
 
 
 #Get out the certificate for the External PG DB
-#ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.cli.certificate.certificate_base64' | base64 --decode > $CONFIG_DIR/postgrescert.pem
+ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.cli.certificate.certificate_base64' | base64 --decode > $CONFIG_DIR/postgrescert.pem
 
 # openssl crl2pkcs7 -nocrl -certfile postgrescert.pem | openssl pkcs7 -print_certs -out postgrescertpk7.pem
 # openssl pkey -in postgrescert.pem -out pgkey.pem
