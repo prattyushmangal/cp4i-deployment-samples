@@ -160,10 +160,10 @@ DDD_SUFFIX_FOR_ACE_POLICYPROJECT=$([[ $SUFFIX == "ddd" ]] && echo "-${DDD_DEMO_T
 ibmcloud plugin install cloud-databases
 
 DB_POD=$(oc get pod -n $POSTGRES_NAMESPACE -l name=postgresql -o jsonpath='{.items[].metadata.name}')
-#DB_SVC=$(ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.postgres.hosts[0].hostname')
-#DB_PORT=$(ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.postgres.hosts[0].port')
-DB_SVC="9.30.213.124"
-DB_PORT="5432"
+DB_SVC=$(ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.postgres.hosts[0].hostname')
+DB_PORT=$(ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.postgres.hosts[0].port')
+#DB_SVC="9.30.213.124"
+#DB_PORT="5432"
 
 echo -e "$INFO [INFO] Current directory: $CURRENT_DIR"
 echo -e "$INFO [INFO] Working directory: $WORKING_DIR"
