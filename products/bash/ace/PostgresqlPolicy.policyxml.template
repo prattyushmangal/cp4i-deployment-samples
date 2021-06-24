@@ -6,7 +6,7 @@
     <databaseVersion>9.1</databaseVersion>
     <type4DriverClassName>com.ibm.db2.jcc.DB2Driver</type4DriverClassName>
     <type4DatasourceClassName>com.ibm.db2.jcc.DB2XADataSource</type4DatasourceClassName>
-    <connectionUrlFormat>jdbc:postgresql://[serverName]:[portNumber]/[databaseName]?user={{DB_USER}}&amp;password={{DB_PASS}}</connectionUrlFormat>
+    <connectionUrlFormat>jdbc:db2://[serverName]:[portNumber]/[databaseName]?user={{DB_USER}}&amp;password={{DB_PASS}}</connectionUrlFormat>
     <connectionUrlFormatAttr1></connectionUrlFormatAttr1>
     <connectionUrlFormatAttr2></connectionUrlFormatAttr2>
     <connectionUrlFormatAttr3></connectionUrlFormatAttr3>
