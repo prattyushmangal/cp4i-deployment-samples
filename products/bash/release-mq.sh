@@ -148,13 +148,16 @@ metadata:
 spec:
   license:
     accept: true
-    license: $(getMQLicense $namespace)
+    license: L-RJON-BYRMYW
     use: NonProduction
   queueManager:
     name: ${qm_name}
+    availability:
+      type: NativeHA
     storage:
+      defaultClass: ibmc-block-gold
       queueManager:
-        type: ephemeral
+        type: persistent-claim
   template:
     pod:
       containers:
@@ -165,9 +168,6 @@ spec:
   version: 9.2.2.0-r1
   web:
     enabled: true
-  tracing:
-    enabled: ${tracing_enabled}
-    namespace: ${tracing_namespace}
 EOF
   if [[ "$?" != "0" ]]; then
     echo -e "$cross [ERROR] Failed to apply QueueManager CR"
