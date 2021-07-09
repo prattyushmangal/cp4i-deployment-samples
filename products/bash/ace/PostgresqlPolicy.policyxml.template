@@ -20,7 +20,7 @@
     <maxConnectionPoolSize>0</maxConnectionPoolSize>
     <securityIdentity></securityIdentity>
     <environmentParms></environmentParms>
-    <jdbcProviderXASupport>true</jdbcProviderXASupport>
+    <jdbcProviderXASupport>false</jdbcProviderXASupport>
     <useDeployedJars>true</useDeployedJars>
   </policy>
 </policies>
