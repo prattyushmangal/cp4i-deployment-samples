@@ -35,7 +35,7 @@ tracing_enabled="false"
 tracing_namespace=""
 CURRENT_DIR=$(dirname $0)
 POLICY_PROJECT_TYPE="policyproject-ddd-dev"
-ace_replicas="2"
+ace_replicas="3"
 
 function divider() {
   echo -e "\n-------------------------------------------------------------------------------------------------------------------\n"
@@ -129,7 +129,7 @@ spec:
   license:
     accept: true
     license: $(getACELicense $namespace)
-    use: CloudPakForIntegrationNonProduction
+    use: AppConnectEnterpriseProduction
   pod:
    containers:
      runtime:
@@ -148,9 +148,6 @@ spec:
     endpointType: https
   useCommonServices: true
   version: '12.0.1.0-r1'
-  tracing:
-    enabled: ${tracing_enabled}
-    namespace: ${tracing_namespace}
 EOF
 
 if [[ "$?" != "0" ]]; then
