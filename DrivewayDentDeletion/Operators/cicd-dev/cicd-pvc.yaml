@@ -5,7 +5,7 @@ metadata:
 spec:
   storageClassName: "{{DEFAULT_FILE_STORAGE}}"
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 10Gi
