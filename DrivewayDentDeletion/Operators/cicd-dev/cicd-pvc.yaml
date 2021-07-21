@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: git-source-workspace
 spec:
-  storageClassName: "{{DEFAULT_FILE_STORAGE}}"
+  storageClassName: "{{DEFAULT_BLOCK_STORAGE}}"
   accessModes:
     - ReadWriteOnce
   resources:
