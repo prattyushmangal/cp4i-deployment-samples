@@ -15,6 +15,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: buildah-mq
+  labels:
+    region: us-east
+    zone: wdc07
 spec:
   storageClassName: "{{DEFAULT_BLOCK_STORAGE}}"
   accessModes:
@@ -28,6 +31,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: buildah-ace-api
+  labels:
+    region: us-east
+    zone: wdc07
 spec:
   storageClassName: "{{DEFAULT_BLOCK_STORAGE}}"
   accessModes:
@@ -54,6 +60,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: buildah-ace-bernie
+  labels:
+    region: us-east
+    zone: wdc07
 spec:
   storageClassName: "{{DEFAULT_BLOCK_STORAGE}}"
   accessModes:
@@ -67,6 +76,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: buildah-ace-chris
+  labels:
+    region: us-east
+    zone: wdc07
 spec:
   storageClassName: "{{DEFAULT_BLOCK_STORAGE}}"
   accessModes:
