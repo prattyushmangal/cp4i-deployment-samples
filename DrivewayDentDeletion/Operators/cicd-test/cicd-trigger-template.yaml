@@ -12,7 +12,7 @@ spec:
         timeouts:
           pipeline: "2h15m30s"
         pipelineRef:
-          name: test-pipeline
+          name: test-pipeline-pmfa
         serviceAccountName: pipeline
         workspaces:
           - name: git-source
