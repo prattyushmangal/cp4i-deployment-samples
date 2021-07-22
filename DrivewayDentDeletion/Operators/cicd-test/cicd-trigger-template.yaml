@@ -19,6 +19,4 @@ spec:
         params:
           - name: imageTag
             value: $(uid)
-        timeouts: 
-          pipeline: "2h30m"
-          tasks: "1h"
+        timeout: "2h30m"
