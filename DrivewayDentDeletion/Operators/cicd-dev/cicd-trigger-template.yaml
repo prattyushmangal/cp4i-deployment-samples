@@ -9,8 +9,6 @@ spec:
       metadata:
         name: dev-pipelinerun-$(uid)
       spec:
-        timeouts:
-          pipeline: "2h15m30s"
         pipelineRef:
           name: dev-pipeline
         serviceAccountName: pipeline
