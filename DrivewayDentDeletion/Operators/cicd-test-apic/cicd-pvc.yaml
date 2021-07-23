@@ -34,7 +34,7 @@ metadata:
   labels:
     region: us-east
     zone: wdc07
-  spec:
+spec:
   storageClassName: "{{DEFAULT_BLOCK_STORAGE}}"
   accessModes:
     - ReadWriteOnce
