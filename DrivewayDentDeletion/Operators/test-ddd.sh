@@ -283,11 +283,11 @@ if ! $CURRENT_DIR/cicd-apply-test-pipeline.sh -n "$NAMESPACE" -r "$FORKED_REPO" 
   exit 1
 fi
 
-wait_and_trigger_pipeline "test"
+# wait_and_trigger_pipeline "test"
 
-run_continuous_load_script "$NAMESPACE" "false" "test" "dev"
+# run_continuous_load_script "$NAMESPACE" "false" "test" "dev"
 
-run_continuous_load_script "$NAMESPACE" "false" "test" "test"
+# run_continuous_load_script "$NAMESPACE" "false" "test" "test"
 
 # # -------------------------------------------- TEST APIC PIPELINE RUN -----------------------------------------------------
 
@@ -297,7 +297,7 @@ run_continuous_load_script "$NAMESPACE" "false" "test" "test"
 #   exit 1
 # fi
 
-# wait_and_trigger_pipeline "test-apic"
+wait_and_trigger_pipeline "test-apic"
 
 # run_continuous_load_script "$NAMESPACE" "true" "test-apic" "dev"
 
