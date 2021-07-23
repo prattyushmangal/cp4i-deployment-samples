@@ -277,11 +277,11 @@ divider
 
 # -------------------------------------------- TEST PIPELINE RUN ----------------------------------------------------------
 
-echo -e "$INFO [INFO] Applying the test pipeline resources...\n"
-if ! $CURRENT_DIR/cicd-apply-test-pipeline.sh -n "$NAMESPACE" -r "$FORKED_REPO" -b "$BRANCH" -f "$DEFAULT_FILE_STORAGE" -g "$DEFAULT_BLOCK_STORAGE"; then
-  echo -e "$CROSS [ERROR] Could not apply the test pipeline resources."
-  exit 1
-fi
+#echo -e "$INFO [INFO] Applying the test pipeline resources...\n"
+#if ! $CURRENT_DIR/cicd-apply-test-pipeline.sh -n "$NAMESPACE" -r "$FORKED_REPO" -b "$BRANCH" -f "$DEFAULT_FILE_STORAGE" -g "$DEFAULT_BLOCK_STORAGE"; then
+#  echo -e "$CROSS [ERROR] Could not apply the test pipeline resources."
+#  exit 1
+#fi
 
 # wait_and_trigger_pipeline "test"
 
@@ -291,11 +291,11 @@ fi
 
 # # -------------------------------------------- TEST APIC PIPELINE RUN -----------------------------------------------------
 
-# echo -e "$INFO [INFO] Applying the test apic pipeline resources...\n"
-# if ! $CURRENT_DIR/cicd-apply-test-apic-pipeline.sh -n "$NAMESPACE" -r "$FORKED_REPO" -b "$BRANCH" -f "$DEFAULT_FILE_STORAGE" -g "$DEFAULT_BLOCK_STORAGE"; then
-#   echo -e "$CROSS [ERROR] Could not apply the test apic pipeline resources."
-#   exit 1
-# fi
+echo -e "$INFO [INFO] Applying the test apic pipeline resources...\n"
+if ! $CURRENT_DIR/cicd-apply-test-apic-pipeline.sh -n "$NAMESPACE" -r "$FORKED_REPO" -b "$BRANCH" -f "$DEFAULT_FILE_STORAGE" -g "$DEFAULT_BLOCK_STORAGE"; then
+  echo -e "$CROSS [ERROR] Could not apply the test apic pipeline resources."
+  exit 1
+fi
 
 wait_and_trigger_pipeline "test-apic"
 
