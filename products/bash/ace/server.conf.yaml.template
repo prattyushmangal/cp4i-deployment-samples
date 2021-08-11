@@ -8,3 +8,6 @@ ResourceManagers:
     KeystoreFile: '/home/aceuser/keystores/{{KEYSTORE}}'
     KeystoreType: 'PKCS12'
     KeystorePassword: 'brokerKeystore::password'
+UserExits:
+  activeUserExitList: 'ACEOpenTracingUserExit'
+  userExitPath: '/var/mqsi/shared-classes'

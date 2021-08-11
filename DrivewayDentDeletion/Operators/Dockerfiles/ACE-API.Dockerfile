@@ -2,3 +2,6 @@
 FROM cp.icr.io/cp/appc/ace-server-prod@sha256:0214e90f08f57574f02b39d847180f7502cc1c17fe93a31829f11f9b8a7794d1
 ENV MQCERTLABL=aceclient
 COPY DrivewayDemo.bar /home/aceuser/initial-config/bars/
+COPY ACEOpenTracingUserExit.lel /var/mqsi/shared-classes
+COPY tracelibrary.so /var/mqsi/shared-classes
+COPY acetracingexit.conf /var/mqsi/shared-classes
