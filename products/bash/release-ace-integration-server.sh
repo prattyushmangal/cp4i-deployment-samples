@@ -123,8 +123,6 @@ metadata:
   name: ${is_release_name}
   namespace: ${namespace}
 spec:
-  annotations:
-    haproxy.router.openshift.io/balance: roundrobin
   adminServerSecure: true
   configurations: $ace_policy_names
   designerFlowsOperationMode: disabled
