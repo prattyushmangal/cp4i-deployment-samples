@@ -129,14 +129,15 @@ function wait_and_trigger_pipeline() {
     time=$((time + 1))
     sleep 60
   done
-
+  set -x
   echo -e "$INFO [INFO] The event listener pod:\n"
   oc get pod -n $NAMESPACE | grep el-$PIPELINE_TYPE-event-listener | grep 1/1 | grep Running
   echo -e "\n$INFO [INFO] The event listener pod is now in Running, going ahead to trigger the '$PIPELINE_TYPE' pipeline...\n"
+  echo "Hello Im Here + url is $URL"
   curl -X POST $URL --header "Content-Type: application/json" --data '{"message":"Test run"}'
 
   divider
-
+  set +x
   echo -e "$INFO [INFO] Printing the logs for the '$PIPELINE_TYPE' pipeline...\n"
   if ! $TKN pr logs --last -f; then
     echo -e "\n$CROSS [ERROR] Error in displaying the logs for the '$PIPELINE_TYPE' pipeline, Exiting the testing now."
