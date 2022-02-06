@@ -193,75 +193,75 @@ oc project $NAMESPACE
 
 divider
 
-# -------------------------------------- INSTALL JQ ---------------------------------------------------------------------
+# # -------------------------------------- INSTALL JQ ---------------------------------------------------------------------
 
 JQ=jq
-echo -e "$INFO [INFO] Checking if jq is pre-installed..."
-$JQ --version
+# echo -e "$INFO [INFO] Checking if jq is pre-installed..."
+# $JQ --version
 
-if [ $? -eq 0 ]; then
-  JQ_INSTALLED=true
-fi
+# if [ $? -eq 0 ]; then
+#   JQ_INSTALLED=true
+# fi
 
-if [[ "$JQ_INSTALLED" == "false" ]]; then
-  echo "[INFO] JQ is not installed, installing jq..."
-  if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    echo "[INFO] Installing on linux"
-    wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
-    chmod +x ./jq
-    JQ=./jq
-  elif [[ "$OSTYPE" == "darwin"* ]]; then
-    echo "[INFO] Installing on MAC"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    brew install jq
-  fi
-fi
+# if [[ "$JQ_INSTALLED" == "false" ]]; then
+#   echo "[INFO] JQ is not installed, installing jq..."
+#   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+#     echo "[INFO] Installing on linux"
+#     wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+#     chmod +x ./jq
+#     JQ=./jq
+#   elif [[ "$OSTYPE" == "darwin"* ]]; then
+#     echo "[INFO] Installing on MAC"
+#     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+#     brew install jq
+#   fi
+# fi
 
-echo -e "\n$TICK [SUCCESS] Installed JQ version is $($JQ --version)"
+# echo -e "\n$TICK [SUCCESS] Installed JQ version is $($JQ --version)"
 
-divider
+# divider
 
-# -------------------------------------- INSTALL TKN ---------------------------------------------------------------------
+# # -------------------------------------- INSTALL TKN ---------------------------------------------------------------------
 
-echo -e "$INFO [INFO] Checking if tekton-cli is pre-installed...\n"
+# echo -e "$INFO [INFO] Checking if tekton-cli is pre-installed...\n"
 TKN=tkn
-$TKN version
+# $TKN version
 
-if [ $? -eq 0 ]; then
-  TKN_INSTALLED=true
-fi
+# if [ $? -eq 0 ]; then
+#   TKN_INSTALLED=true
+# fi
 
-if [[ "$TKN_INSTALLED" == "false" ]]; then
-  echo -e "$INFO [INFO] Installing tekton cli..."
-  if [[ $(uname) == Darwin ]]; then
-    echo -e "$INFO [INFO] Installing on MAC"
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    brew tap tektoncd/tools
-    brew install tektoncd/tools/tektoncd-cli
-  else
-    echo -e "$INFO [INFO] Installing on Linux"
-    # Get the tar
-    curl -LO https://github.com/tektoncd/cli/releases/download/v0.12.0/tkn_0.12.0_Linux_x86_64.tar.gz
-    # Extract tkn to current directory
-    tar xvzf tkn_0.12.0_Linux_x86_64.tar.gz -C . tkn
-    UNTAR_STATUS=$(echo $?)
-    if [[ "$UNTAR_STATUS" -ne 0 ]]; then
-      echo -e "\n$CROSS [ERROR] Could not extract the tar for 'tkn'"
-      exit 1
-    fi
+# if [[ "$TKN_INSTALLED" == "false" ]]; then
+#   echo -e "$INFO [INFO] Installing tekton cli..."
+#   if [[ $(uname) == Darwin ]]; then
+#     echo -e "$INFO [INFO] Installing on MAC"
+#     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+#     brew tap tektoncd/tools
+#     brew install tektoncd/tools/tektoncd-cli
+#   else
+#     echo -e "$INFO [INFO] Installing on Linux"
+#     # Get the tar
+#     curl -LO https://github.com/tektoncd/cli/releases/download/v0.12.0/tkn_0.12.0_Linux_x86_64.tar.gz
+#     # Extract tkn to current directory
+#     tar xvzf tkn_0.12.0_Linux_x86_64.tar.gz -C . tkn
+#     UNTAR_STATUS=$(echo $?)
+#     if [[ "$UNTAR_STATUS" -ne 0 ]]; then
+#       echo -e "\n$CROSS [ERROR] Could not extract the tar for 'tkn'"
+#       exit 1
+#     fi
 
-    chmod +x ./tkn
-    CHMOD_STATUS=$(echo $?)
-    if [[ "$CHMOD_STATUS" -ne 0 ]]; then
-      echo -e "\n$CROSS [ERROR] Could not make the 'tkn' executable"
-      exit 1
-    fi
+#     chmod +x ./tkn
+#     CHMOD_STATUS=$(echo $?)
+#     if [[ "$CHMOD_STATUS" -ne 0 ]]; then
+#       echo -e "\n$CROSS [ERROR] Could not make the 'tkn' executable"
+#       exit 1
+#     fi
 
-    TKN=./tkn
-  fi
-fi
+#     TKN=./tkn
+#   fi
+# fi
 
-divider
+# divider
 
 # -------------------------------------------- DEV PIPELINE RUN -----------------------------------------------------------
 
@@ -277,31 +277,31 @@ run_continuous_load_script "$NAMESPACE" "false" "dev" "dev"
 
 # -------------------------------------------- TEST PIPELINE RUN ----------------------------------------------------------
 
-echo -e "$INFO [INFO] Applying the test pipeline resources...\n"
-if ! $CURRENT_DIR/cicd-apply-test-pipeline.sh -n "$NAMESPACE" -r "$FORKED_REPO" -b "$BRANCH" -f "$DEFAULT_FILE_STORAGE" -g "$DEFAULT_BLOCK_STORAGE"; then
-  echo -e "$CROSS [ERROR] Could not apply the test pipeline resources."
-  exit 1
-fi
+# echo -e "$INFO [INFO] Applying the test pipeline resources...\n"
+# if ! $CURRENT_DIR/cicd-apply-test-pipeline.sh -n "$NAMESPACE" -r "$FORKED_REPO" -b "$BRANCH" -f "$DEFAULT_FILE_STORAGE" -g "$DEFAULT_BLOCK_STORAGE"; then
+#   echo -e "$CROSS [ERROR] Could not apply the test pipeline resources."
+#   exit 1
+# fi
 
-wait_and_trigger_pipeline "test"
+# wait_and_trigger_pipeline "test"
 
-run_continuous_load_script "$NAMESPACE" "false" "test" "dev"
+# run_continuous_load_script "$NAMESPACE" "false" "test" "dev"
 
-run_continuous_load_script "$NAMESPACE" "false" "test" "test"
+# run_continuous_load_script "$NAMESPACE" "false" "test" "test"
 
-# -------------------------------------------- TEST APIC PIPELINE RUN -----------------------------------------------------
+# # -------------------------------------------- TEST APIC PIPELINE RUN -----------------------------------------------------
 
-echo -e "$INFO [INFO] Applying the test apic pipeline resources...\n"
-if ! $CURRENT_DIR/cicd-apply-test-apic-pipeline.sh -n "$NAMESPACE" -r "$FORKED_REPO" -b "$BRANCH" -f "$DEFAULT_FILE_STORAGE" -g "$DEFAULT_BLOCK_STORAGE"; then
-  echo -e "$CROSS [ERROR] Could not apply the test apic pipeline resources."
-  exit 1
-fi
+# echo -e "$INFO [INFO] Applying the test apic pipeline resources...\n"
+# if ! $CURRENT_DIR/cicd-apply-test-apic-pipeline.sh -n "$NAMESPACE" -r "$FORKED_REPO" -b "$BRANCH" -f "$DEFAULT_FILE_STORAGE" -g "$DEFAULT_BLOCK_STORAGE"; then
+#   echo -e "$CROSS [ERROR] Could not apply the test apic pipeline resources."
+#   exit 1
+# fi
 
-wait_and_trigger_pipeline "test-apic"
+# wait_and_trigger_pipeline "test-apic"
 
-run_continuous_load_script "$NAMESPACE" "true" "test-apic" "dev"
+# run_continuous_load_script "$NAMESPACE" "true" "test-apic" "dev"
 
-run_continuous_load_script "$NAMESPACE" "true" "test-apic" "test"
+# run_continuous_load_script "$NAMESPACE" "true" "test-apic" "test"
 
 # -------------------------------------------PRINT PIPELINERUN, TASKRUN, EXIT ---------------------------------------------
 

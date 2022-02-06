@@ -168,6 +168,7 @@ while true; do
         }
       ]
     }")
+  
 
   post_response_code=$(echo "${post_response##* }")
   $DEBUG && echo "[DEBUG] post response: ${post_response}"

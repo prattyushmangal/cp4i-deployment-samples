@@ -156,8 +156,12 @@ fi
 
 DDD_SUFFIX_FOR_ACE_POLICYPROJECT=$([[ $SUFFIX == "ddd" ]] && echo "-${DDD_DEMO_TYPE}" || echo "")
 
+#PREREQ - BE LOGGED INTO IBMCLOUD CLI
+ibmcloud plugin install cloud-databases
+
 DB_POD=$(oc get pod -n $POSTGRES_NAMESPACE -l name=postgresql -o jsonpath='{.items[].metadata.name}')
-DB_SVC="postgresql.$POSTGRES_NAMESPACE.svc.cluster.local"
+DB_SVC=$(ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.postgres.hosts[0].hostname')
+DB_PORT=$(ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.postgres.hosts[0].port')
 
 echo -e "$INFO [INFO] Current directory: $CURRENT_DIR"
 echo -e "$INFO [INFO] Working directory: $WORKING_DIR"
@@ -174,9 +178,9 @@ echo -e "$INFO [INFO] DEBUG mode in creating ace config: '$DEBUG'"
 
 divider
 
-TYPES=("serverconf" "keystore" "keystore" "keystore" "truststore" "policyproject" "setdbparms")
-FILES=("$CONFIG_DIR/$SUFFIX/server.conf.yaml" "$KEYSTORE" "$MQ_CERT/application.kdb" "$MQ_CERT/application.sth" "$MQ_CERT/application.jks" "$CONFIG_DIR/$SUFFIX/DefaultPolicies" "$CONFIG_DIR/$SUFFIX/setdbparms.txt")
-NAMES=("serverconf-$SUFFIX" "keystore-$SUFFIX" "application.kdb" "application.sth" "application.jks" "policyproject-${SUFFIX}${DDD_SUFFIX_FOR_ACE_POLICYPROJECT}" "setdbparms-$SUFFIX")
+TYPES=("serverconf" "keystore" "truststorecertificate" "keystore" "keystore" "truststore" "policyproject" "setdbparms")
+FILES=("$CONFIG_DIR/$SUFFIX/server.conf.yaml" "$KEYSTORE" "$CONFIG_DIR/postgres.pem" "$MQ_CERT/application.kdb" "$MQ_CERT/application.sth" "$MQ_CERT/application.jks" "$CONFIG_DIR/$SUFFIX/DefaultPolicies" "$CONFIG_DIR/$SUFFIX/setdbparms.txt")
+NAMES=("serverconf-$SUFFIX" "keystore-$SUFFIX" "pgpem" "application.kdb" "application.sth" "application.jks" "policyproject-${SUFFIX}${DDD_SUFFIX_FOR_ACE_POLICYPROJECT}" "setdbparms-$SUFFIX")
 
 # Copy all static config files & templates to default working directory (/tmp)
 cp -r $CURRENT_DIR/ace $CURRENT_DIR/mq $WORKING_DIR/
@@ -219,7 +223,18 @@ CERTS_KEY_BUNDLE=$CONFIG_DIR/certs-key.pem
 CERTS=$CONFIG_DIR/certs.pem
 KEY=$CONFIG_DIR/key.pem
 rm $CERTS $KEY $KEYSTORE
-oc -n openshift-config-managed get secret router-certs -o json | jq -r '.data | .[]' | base64 --decode >$CERTS_KEY_BUNDLE
+
+
+#Get out the certificate for the External PG DB
+ibmcloud cdb deployment-cacert cp-svt-postgres-db -j | jq -r '.connection.cli.certificate.certificate_base64' | base64 --decode > $CONFIG_DIR/postgrescert.pem
+openssl x509 -in $CONFIG_DIR/postgrescert.pem -out $CONFIG_DIR/postgres.der -outform der
+# openssl crl2pkcs7 -nocrl -certfile postgrescert.pem | openssl pkcs7 -print_certs -out postgrescertpk7.pem
+# openssl pkey -in postgrescert.pem -out pgkey.pem
+# openssl pkcs12 -export -out $WORKING_DIR/pgkeystore.p12 -inkey pgkey.pem -in postgrescertpk7.pem -password pass:$KEYSTORE_PASS
+
+# keytool -import -alias postgres -keystore pg.jks -file postgrescert.pem -storepass $KEYSTORE_PASS -noprompt
+
+oc -n openshift-config-managed get secret router-certs -o json | jq -r '.data | .[]' | base64 --decode > $CERTS_KEY_BUNDLE
 openssl crl2pkcs7 -nocrl -certfile $CERTS_KEY_BUNDLE | openssl pkcs7 -print_certs -out $CERTS
 openssl pkey -in $CERTS_KEY_BUNDLE -out $KEY
 openssl pkcs12 -export -out $KEYSTORE -inkey $KEY -in $CERTS -password pass:$KEYSTORE_PASS
@@ -247,6 +262,7 @@ cat $CONFIG_DIR/PostgresqlPolicy.policyxml.template |
   sed "s#{{DB_SVC}}#$DB_SVC#g;" |
   sed "s#{{DB_PORT}}#$DB_PORT#g;" |
   sed "s#{{DB_NAME}}#$DB_NAME#g;" |
+  sed "s#{{KEYSTORE_PASS}}#$KEYSTORE_PASS#g;" |
   sed "s#{{DB_USER}}#$DB_USER#g;" |
   sed "s#{{DB_PASS}}#$DB_PASS#g;" >$CONFIG_DIR/$SUFFIX/DefaultPolicies/PostgresqlPolicy.policyxml
 
